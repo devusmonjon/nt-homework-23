@@ -11,11 +11,26 @@ const Page = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    router.refresh();
+    location.reload();
   };
 
   useEffect(() => {
-    setToken(localStorage.getItem("token") || null);
+    const tokenFromStorage = localStorage.getItem("token");
+    if (tokenFromStorage) {
+      fetch("https://dummyjson.com/auth/me", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${tokenFromStorage}`,
+        },
+      })
+        .then((res) =>
+          res.status === 200 ? res.json() : localStorage.removeItem("token")
+        )
+        .then((data) => setToken(tokenFromStorage))
+        .catch((err) => {
+          localStorage.removeItem("token");
+        });
+    }
   }, []);
 
   return (

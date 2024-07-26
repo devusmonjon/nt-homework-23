@@ -1,12 +1,26 @@
 "use client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 
 const Login = () => {
   const [token, setToken] = useState<string | null>("");
   const router = useRouter();
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState<{
+    id: number;
+    firstName: string;
+    lastName: string;
+    email: string;
+    username: string;
+    image: string;
+  }>({
+    id: 0,
+    firstName: "Loading...",
+    lastName: "Loading...",
+    email: "Loading...",
+    username: "Loading...",
+    image: "Loading...",
+  });
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -56,6 +70,25 @@ const Login = () => {
           >
             Logout
           </button>
+        </div>
+        <div className="mt-10 mb-10">
+          <h1 className="text-3xl font-medium mb-4">User</h1>
+          <p className="text-[20px]">ID: {user?.id}</p>
+          <p className="text-[20px]">Username: {user?.username}</p>
+          <p className="text-[20px]">Email: {user?.email}</p>
+          <p className="text-[20px]">First Name: {user?.firstName}</p>
+          <p className="text-[20px]">Last Name: {user?.lastName}</p>
+          {user?.image !== "Loading..." ? (
+            <Image
+              src={user?.image}
+              alt="user"
+              width={200}
+              height={200}
+              className="rounded-full"
+            />
+          ) : (
+            user.image
+          )}
         </div>
       </div>
     </div>
